@@ -1,0 +1,18 @@
+FROM alpine
+
+#bash for sanity
+run apk add bash
+#for the vi incompatible people
+run apk add nano
+
+# the compiler needed to run
+run apk add gcc
+run apk add libc-dev
+run apk add make
+
+# libs frequently needing updating on old systems (security libs mostly)
+run apk add openssl
+
+
+# trick to run container as VM for executing sheels in new environment... 
+CMD tail -f /etc/hosts

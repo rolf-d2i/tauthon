@@ -1,0 +1,80 @@
+Docker support. Some quick files to make it easier to us Tauthon through 
+Docker. You can easily run Python binaries from a Docker container 
+however there are some issues with editors and tools interacting with Docker 
+containers. Files are cannot be directly run from a Container running docker 
+etc...
+Docker file should likely 
+==============================
+
+======================================================================
+               Running old python in Docker
+----------------------------------------------------------------------
+Create a Dockerfile and import the old Python version, for instance
+
+FROM python:2-onbuild
+CMD tail -f /etc/hosts # do nothing
+
+And build and run the docker container. The current available Python
+versions depend on maintainers of on https://hub.docker.com/. The docker
+containers commonly include instructions on how to build and run Python.
+
+
+======================================================================
+               Running Tauthon in Docker
+----------------------------------------------------------------------
+Currently there is no prebuilt and maintained Docker container of Tauthon 
+This means you have to build a Tauthon container from source.
+
+======================================================================
+               Container that can compile Tauthon
+----------------------------------------------------------------------
+Use docker run -f Docker.runtime and docker-compose -f comp-runtime.yml 
+up. Login to the container using docker exec -ti tauthon_src bash.
+Go to tauthonsrc and make ./configure && make && make install to install
+Tauthon.
+
+
+======================================================================
+               Compiling Tauthon image using Docker
+----------------------------------------------------------------------
+From root directory type "Docker build -f Docker/Dockerfile.image -tag 
+tauthon_bin .".
+
+
+======================================================================
+               Running Tauthon using Docker
+----------------------------------------------------------------------
+Build image using above instruction and use the following to run your 
+code.
+docker run --rm -v "$PWD":/myapp -w /myapp tauthon_bin tauthon 
+your-daemon-or-script.py
+
+You may want to build a Dockerfile for more complex projects.
+
+
+======================================================================
+               Using editors together with Tauthon in Docker
+----------------------------------------------------------------------
+Create a compose-docker file fo your project and ensure that you mount
+your project inside the docker container using the volumes command, see
+template below.
+
+version: '3.3' # or some other version
+services:
+   tmp_tauthonimage:
+      image: tauthon_image # or what you name is for your image
+         
+      # mount your project inside docker
+      volumes:
+         - <your project path>:<container path>  
+         
+         
+Using this method will mirror changes to the files in your editor to the 
+docker container.
+
+
+
+         
+         
+         
+         

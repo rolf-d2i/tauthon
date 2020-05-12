@@ -1,0 +1,25 @@
+#
+# Setup a docker container for executing Tauthon
+# This is intended to be executed from root of Tauthon package
+#
+#
+# Needs a build: for easy building of image
+#
+# Latest version is 3.3 but for convenince we use older versions here
+#
+---
+version: '3.3'
+services:
+
+
+
+   tauthon:
+      image: tauthon_src
+      container_name: tauthon_src      
+      build:      
+         context: .
+         dockerfile: ./Dockerfile.runtime
+         
+      # mount current root inside container as file directory, makes it easier to build..
+      volumes:
+         - ../:/tauthonsrc

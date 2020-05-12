@@ -1,0 +1,34 @@
+#
+#Setup to replicate most behaviours of Python containers
+#
+FROM alpine
+
+#bash for sanity
+run apk add bash
+#for the vi incompatible people
+run apk add nano
+
+# the compiler needed to run
+run apk add gcc
+run apk add libc-dev
+run apk add make
+
+# libs frequently needing updating on old systems (security libs mostly)
+run apk add openssl
+
+
+# copy everything to container
+run mkdir tauthsrc
+copy . /tauthsrc
+workdir /tauthsrc
+run ./configure
+run make
+run make install
+
+
+workdir /
+
+run mkdir myapp
+
+
+CMD ["tauthon"]
